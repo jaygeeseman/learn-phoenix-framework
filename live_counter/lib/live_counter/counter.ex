@@ -1,6 +1,6 @@
 defmodule LiveCounter.Count do
 @moduledoc """
-Nothing to see here.
+Keeps track of the state information.
 """
 
   use GenServer

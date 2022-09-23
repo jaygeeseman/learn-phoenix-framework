@@ -8,6 +8,8 @@ defmodule LiveCounter.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      # Start the app state
+      LiveCounter.Count,
       # Start the Telemetry supervisor
       LiveCounterWeb.Telemetry,
       # Start the PubSub system

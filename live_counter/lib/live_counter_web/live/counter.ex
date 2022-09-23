@@ -3,28 +3,26 @@ defmodule LiveCounterWeb.Counter do
 Nothing to see here.
 """
   use Phoenix.LiveView
+  alias LiveCounter.Count
+  alias Phoenix.PubSub
 
-  @topic "live"
+  @topic Count.topic
 
   def mount(_params, _session, socket) do
-    LiveCounterWeb.Endpoint.subscribe(@topic)
-    {:ok, assign(socket, :counter_value, 0)}
+    PubSub.subscribe(LiveCounter.PubSub, @topic)
+    {:ok, assign(socket, :counter_value, Count.current)}
   end
 
   def handle_event("counter-increment", _, socket) do
-    new_state = update(socket, :counter_value, &(&1 + 1))
-    LiveCounterWeb.Endpoint.broadcast_from(self(), @topic, "counter-increment", new_state.assigns)
-    {:noreply, new_state}
+    {:noreply, assign(socket, counter_value: Count.counter_increment())}
   end
 
   def handle_event("counter-decrement", _, socket) do
-    new_state = update(socket, :counter_value, &(&1 - 1))
-    LiveCounterWeb.Endpoint.broadcast_from(self(), @topic, "counter-decrement", new_state.assigns)
-    {:noreply, new_state}
+    {:noreply, assign(socket, counter_value: Count.counter_decrement())}
   end
 
-  def handle_info(msg, socket) do
-    {:noreply, assign(socket, counter_value: msg.payload.counter_value)}
+  def handle_info({:count, count}, socket) do
+    {:noreply, assign(socket, counter_value: count)}
   end
 
   def render(assigns) do

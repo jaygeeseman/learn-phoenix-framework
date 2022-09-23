@@ -1,5 +1,10 @@
 defmodule LiveCounterWeb.Counter do
+@moduledoc """
+Nothing to see here.
+"""
   use Phoenix.LiveView
+
+  @topic "live"
 
   def mount(_params, _session, socket) do
     {:ok, assign(socket, :counter_value, 0)}

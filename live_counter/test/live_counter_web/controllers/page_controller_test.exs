@@ -1,4 +1,7 @@
 defmodule LiveCounterWeb.PageControllerTest do
+@moduledoc """
+Nothing to see here
+"""
   use LiveCounterWeb.ConnCase
 
   test "GET /", %{conn: conn} do

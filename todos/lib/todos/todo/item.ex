@@ -1,4 +1,7 @@
 defmodule Todos.Todo.Item do
+@moduledoc """
+Defines items schema
+"""
   use Ecto.Schema
   import Ecto.Changeset
 

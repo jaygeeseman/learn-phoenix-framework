@@ -1,4 +1,7 @@
 defmodule TodosWeb.Telemetry do
+@moduledoc """
+Nothing to see here.
+"""
   use Supervisor
   import Telemetry.Metrics
 

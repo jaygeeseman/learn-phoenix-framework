@@ -29,7 +29,6 @@
 
 <span><%= link "New Item", to: Routes.item_path(@conn, :new) %></span>
 
-
 <section class="todoapp">
   <header class="header">
     <h1>todos</h1>
@@ -39,20 +38,18 @@
     <input id="toggle-all" class="toggle-all" type="checkbox" />
     <label for="toggle-all">Mark all as complete</label>
     <ul class="todo-list">
-      <li data-id="1590167947253" class="">
-        <div class="view">
-          <input class="toggle" type="checkbox" />
-          <label>Learn how to build a Todo list in Phoenix</label>
-          <button class="destroy"></button>
-        </div>
-      </li>
-      <li data-id="1590167956628" class="completed">
-        <div class="view">
-          <input class="toggle" type="checkbox" />
-          <label>Completed item</label>
-          <button class="destroy"></button>
-        </div>
-      </li>
+      <%= for item <- @items do %>
+        <li data-id={item.id} class={complete(item)}>
+          <div class="view">
+            <input checked={checked(item)} class="toggle" type="checkbox" />
+            <label><%= item.text %></label>
+            <%# <button class="destroy"></button> %>
+            <%= link "", class: "destroy",
+              to: Routes.item_path(@conn, :delete, item), method: :delete,
+              data: [confirm: "Are you sure?"] %>
+          </div>
+        </li>
+      <% end %>
     </ul>
   </section>
   <footer class="footer" style="display: block;">

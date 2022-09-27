@@ -29,6 +29,15 @@ defmodule Todos.TodoTest do
       assert item.text == "some text"
     end
 
+    test "create_item/1 sets appropriate default values" do
+      valid_attrs = %{text: "some text"}
+
+      assert {:ok, %Item{} = item} = Todo.create_item(valid_attrs)
+      assert item.person_id == 0
+      assert item.status == 0
+      assert item.text == "some text"
+    end
+
     test "create_item/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Todo.create_item(@invalid_attrs)
     end

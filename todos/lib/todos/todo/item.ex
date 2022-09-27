@@ -6,8 +6,8 @@ Defines items schema
   import Ecto.Changeset
 
   schema "items" do
-    field :person_id, :integer
-    field :status, :integer
+    field :person_id, :integer, default: 0
+    field :status, :integer, default: 0
     field :text, :string
 
     timestamps()
@@ -17,6 +17,6 @@ Defines items schema
   def changeset(item, attrs) do
     item
     |> cast(attrs, [:text, :person_id, :status])
-    |> validate_required([:text, :person_id, :status])
+    |> validate_required([:text])
   end
 end

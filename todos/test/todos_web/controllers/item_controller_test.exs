@@ -25,11 +25,11 @@ defmodule TodosWeb.ItemControllerTest do
     test "redirects to show when data is valid", %{conn: conn} do
       conn = post(conn, Routes.item_path(conn, :create), item: @create_attrs)
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.item_path(conn, :show, id)
+      assert redirected_to(conn) == Routes.item_path(conn, :index)
+      assert html_response(conn, 302) =~ "redirected"
 
-      conn = get(conn, Routes.item_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show Item"
+      conn = get(conn, Routes.item_path(conn, :index))
+      assert html_response(conn, 200) =~ @create_attrs.text
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

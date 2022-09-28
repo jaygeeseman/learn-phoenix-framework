@@ -11,11 +11,11 @@ defmodule TodosWeb.ItemViewTest do
   end
 
   test "checked/1 returns true if item.status == 1" do
-    assert ItemView.checked(%{status: 1}) == true
+    assert ItemView.checked(%{status: 1}) == "checked"
   end
 
   test "checked/1 returns false if item.status == 0" do
-    assert ItemView.checked(%{status: 0}) == false
+    assert ItemView.checked(%{status: 0}) == ""
   end
 
   test "remaining_items/1 returns count of items where item.status==0" do

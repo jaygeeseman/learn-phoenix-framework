@@ -14,6 +14,37 @@ defmodule TodosWeb.ItemControllerTest do
     end
   end
 
+  describe "filters" do
+    setup [:create_filter_items]
+
+    test "with no filter shows all items", %{conn: conn, items: items} do
+      conn = get(conn, Routes.item_path(conn, :index))
+      Enum.each(items, fn item -> assert html_response(conn, 200) =~ item.text end)
+    end
+
+    test "with \"active\" filter shows items with status 0", %{conn: conn, items: items} do
+      conn = get(conn, Routes.item_path(conn, :index, filter: "active"))
+      Enum.each(items,
+        fn item ->
+          case item.status do
+            1 -> refute html_response(conn, 200) =~ item.text
+            _ -> assert html_response(conn, 200) =~ item.text
+          end
+        end)
+    end
+
+    test "with \"completed\" filter shows items with status 1", %{conn: conn, items: items} do
+      conn = get(conn, Routes.item_path(conn, :index, filter: "completed"))
+      Enum.each(items,
+        fn item ->
+          case item.status do
+            1 -> assert html_response(conn, 200) =~ item.text
+            _ -> refute html_response(conn, 200) =~ item.text
+          end
+        end)
+    end
+  end
+
   describe "new item" do
     test "renders form", %{conn: conn} do
       conn = get(conn, Routes.item_path(conn, :new))
@@ -109,5 +140,11 @@ defmodule TodosWeb.ItemControllerTest do
   defp create_item(_) do
     item = item_fixture()
     %{item: item}
+  end
+
+  defp create_filter_items(_) do
+    item1 = item_fixture(%{status: 0, text: "item one"})
+    item2 = item_fixture(%{status: 1, text: "item two"})
+    %{items: [item1, item2]}
   end
 end

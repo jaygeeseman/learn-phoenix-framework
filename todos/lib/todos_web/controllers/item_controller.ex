@@ -13,7 +13,11 @@ defmodule TodosWeb.ItemController do
 
     items = Todo.list_items()
     changeset = Todo.change_item(item)
-    render(conn, "index.html", items: items, changeset: changeset, editing: item)
+    render(conn, "index.html",
+      items: items,
+      changeset: changeset,
+      editing: item,
+      filter: Map.get(params, "filter", "all"))
   end
 
   def new(conn, _params) do
@@ -70,5 +74,13 @@ defmodule TodosWeb.ItemController do
 
   def toggle_status(item) do
     if item.status == 0, do: 1, else: 0
+  end
+
+  def filter(items, filter_string) do
+    case filter_string do
+      "active" -> Enum.filter(items, fn item -> item.status != 1 end)
+      "completed" -> Enum.filter(items, fn item -> item.status == 1 end)
+      _ -> items
+    end
   end
 end

@@ -13,13 +13,9 @@
     <input id="toggle-all" class="toggle-all" type="checkbox" />
     <label for="toggle-all">Mark all as complete</label>
     <ul class="todo-list">
-      <%= for item <- @items do %>
+      <%= for item <- filter(@items, @filter) do %>
         <li data-id={item.id} class={complete(item)}>
           <div class="view">
-            <%= #link "",
-              #class: "toggle #{checked(item)}",
-              #to: Routes.item_path(@conn, :toggle, item.id) %>
-              <%# <label> %><%= #item.text %><%# </label> %>
             <%= if item.id == @editing.id do %>
               <%= render "form.html", Map.put(assigns, :action,
                 Routes.item_path(@conn, :update, item)) %>
@@ -42,13 +38,13 @@
     <span class="todo-count"><strong><%= remaining_items(@items) %></strong> item<%= if remaining_items(@items) != 1, do: "s" %> left</span>
     <ul class="filters">
       <li>
-        <a href="#/" class="selected">All</a>
+        <%= link "All", to: Routes.item_path(@conn, :index), class: selected(@filter, "all") %>
       </li>
       <li>
-        <a href="#/active">Active</a>
+        <%= link "Active " <> Integer.to_string(Enum.count(filter(@items, "active"))), to: Routes.item_path(@conn, :index, filter: "active"), class: selected(@filter, "active") %>
       </li>
       <li>
-        <a href="#/completed">Completed</a>
+        <%= link "Completed " <> Integer.to_string(Enum.count(filter(@items, "completed"))), to: Routes.item_path(@conn, :index, filter: "completed"), class: selected(@filter, "completed") %>
       </li>
     </ul>
     <button class="clear-completed" style="display: block;">

@@ -31,4 +31,16 @@ defmodule TodosWeb.ItemViewTest do
   test "remaining_items/1 returns 0 (zero) when no items are status==0" do
     assert ItemView.remaining_items([]) == 0
   end
+
+  test "filter/2 returns filtered items properly" do
+    items = [
+      %{text: "one", status: 0},
+      %{text: "two", status: 0},
+      %{text: "three", status: 1}
+    ]
+
+    assert ItemView.filter(items, "all") == items
+    assert ItemView.filter(items, "active") == [Enum.at(items, 0), Enum.at(items, 1)]
+    assert ItemView.filter(items, "completed") == [Enum.at(items, 2)]
+  end
 end

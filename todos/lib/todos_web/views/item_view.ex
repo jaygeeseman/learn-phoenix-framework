@@ -10,8 +10,8 @@ defmodule TodosWeb.ItemView do
 
   def checked(item) do
     case item.status do
-      1 -> true
-      _ -> false
+      1 -> "checked"
+      _ -> ""
     end
   end
 

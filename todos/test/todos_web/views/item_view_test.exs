@@ -17,4 +17,18 @@ defmodule TodosWeb.ItemViewTest do
   test "checked/1 returns false if item.status == 0" do
     assert ItemView.checked(%{status: 0}) == false
   end
+
+  test "remaining_items/1 returns count of items where item.status==0" do
+    items = [
+      %{text: "one", status: 0},
+      %{text: "two", status: 0},
+      %{text: "three", status: 1}
+    ]
+
+    assert ItemView.remaining_items(items) == 2
+  end
+
+  test "remaining_items/1 returns 0 (zero) when no items are status==0" do
+    assert ItemView.remaining_items([]) == 0
+  end
 end

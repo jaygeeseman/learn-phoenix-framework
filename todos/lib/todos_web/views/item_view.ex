@@ -14,4 +14,8 @@ defmodule TodosWeb.ItemView do
       _ -> false
     end
   end
+
+  def remaining_items(items) do
+    Enum.count(items, fn i -> i.status == 0 end)
+  end
 end

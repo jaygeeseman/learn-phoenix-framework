@@ -77,6 +77,35 @@ defmodule TodosWeb.ItemControllerTest do
     end
   end
 
+  describe "toggle_status updates the status of an item" do
+    setup [:create_item]
+
+    test "toggle_status/1 item.status 1 > 0", %{item: item} do
+      assert item.status == 0
+
+      # first toggle
+      toggled_item = %{item | status: TodosWeb.ItemController.toggle_status(item)}
+      assert toggled_item.status == 1
+
+      # second toggle
+      assert TodosWeb.ItemController.toggle_status(toggled_item) == 0
+    end
+
+    test "toggle/2 (toggle endpoint) updates an item.status 0 > 1", %{conn: conn, item: item} do
+      assert item.status == 0
+
+      # first toggle
+      get(conn, Routes.item_path(conn, :toggle, item.id))
+      toggled_item = Todos.Todo.get_item!(item.id)
+      assert toggled_item.status == 1
+
+      # second toggle
+      get(conn, Routes.item_path(conn, :toggle, item.id))
+      toggled_item = Todos.Todo.get_item!(item.id)
+      assert toggled_item.status == 0
+    end
+  end
+
   defp create_item(_) do
     item = item_fixture()
     %{item: item}

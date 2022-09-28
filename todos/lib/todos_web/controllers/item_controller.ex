@@ -60,4 +60,14 @@ defmodule TodosWeb.ItemController do
     |> put_flash(:info, "Item deleted successfully.")
     |> redirect(to: Routes.item_path(conn, :index))
   end
+
+  def toggle(conn, %{"id" => id}) do
+    item = Todo.get_item!(id)
+    Todo.update_item(item, %{status: toggle_status(item)})
+    redirect(conn, to: Routes.item_path(conn, :index))
+  end
+
+  def toggle_status(item) do
+    if item.status == 0, do: 1, else: 0
+  end
 end

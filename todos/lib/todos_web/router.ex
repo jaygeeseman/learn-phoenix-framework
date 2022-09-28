@@ -19,6 +19,7 @@ defmodule TodosWeb.Router do
 
     get "/", PageController, :index
     resources "/items", ItemController
+    get "/items/toggle/:id", ItemController, :toggle
   end
 
   # Other scopes may use custom stacks.

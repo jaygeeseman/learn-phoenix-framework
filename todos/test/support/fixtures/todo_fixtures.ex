@@ -12,7 +12,7 @@ defmodule Todos.TodoFixtures do
       attrs
       |> Enum.into(%{
         person_id: 42,
-        status: 42,
+        status: 0,
         text: "some text"
       })
       |> Todos.Todo.create_item()

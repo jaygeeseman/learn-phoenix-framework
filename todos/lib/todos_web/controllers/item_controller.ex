@@ -66,6 +66,13 @@ defmodule TodosWeb.ItemController do
     |> redirect(to: Routes.item_path(conn, :index))
   end
 
+  def clear_completed(conn, _) do
+    items = Todo.list_items()
+    Enum.filter(items, fn item -> item.status == 1 end)
+    |> Enum.each(fn item -> Todo.delete_item(item) end)
+    redirect(conn, to: Routes.item_path(conn, :index))
+  end
+
   def toggle(conn, %{"id" => id}) do
     item = Todo.get_item!(id)
     Todo.update_item(item, %{status: toggle_status(item)})
@@ -74,13 +81,5 @@ defmodule TodosWeb.ItemController do
 
   def toggle_status(item) do
     if item.status == 0, do: 1, else: 0
-  end
-
-  def filter(items, filter_string) do
-    case filter_string do
-      "active" -> Enum.filter(items, fn item -> item.status != 1 end)
-      "completed" -> Enum.filter(items, fn item -> item.status == 1 end)
-      _ -> items
-    end
   end
 end

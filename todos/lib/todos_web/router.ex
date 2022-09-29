@@ -20,6 +20,7 @@ defmodule TodosWeb.Router do
     get "/", PageController, :index
     resources "/items", ItemController
     get "/items/toggle/:id", ItemController, :toggle
+    get "/clear_completed", ItemController, :clear_completed
     get "/:filter", ItemController, :index
   end
 

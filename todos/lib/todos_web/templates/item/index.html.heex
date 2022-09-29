@@ -41,14 +41,16 @@
         <%= link "All", to: Routes.item_path(@conn, :index), class: selected(@filter, "all") %>
       </li>
       <li>
-        <%= link "Active " <> Integer.to_string(Enum.count(filter(@items, "active"))), to: Routes.item_path(@conn, :index, filter: "active"), class: selected(@filter, "active") %>
+        <%= link "Active " <> Integer.to_string(Enum.count(filter(@items, "active"))),
+          to: Routes.item_path(@conn, :index, filter: "active"),
+          class: selected(@filter, "active") %>
       </li>
       <li>
-        <%= link "Completed " <> Integer.to_string(Enum.count(filter(@items, "completed"))), to: Routes.item_path(@conn, :index, filter: "completed"), class: selected(@filter, "completed") %>
+        <%= link "Completed " <> Integer.to_string(Enum.count(filter(@items, "completed"))),
+          to: Routes.item_path(@conn, :index, filter: "completed"),
+          class: selected(@filter, "completed") %>
       </li>
     </ul>
-    <button class="clear-completed" style="display: block;">
-      Clear completed
-    </button>
+    <%= link "Clear completed", to: Routes.item_path(@conn, :clear_completed), class: "clear-completed" %>
   </footer>
 </section>

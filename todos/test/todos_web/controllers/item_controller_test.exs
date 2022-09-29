@@ -108,6 +108,26 @@ defmodule TodosWeb.ItemControllerTest do
     end
   end
 
+  describe "clear completed items" do
+    setup [:create_filter_items]
+
+    test "deletes items with status 1", %{conn: conn, items: items} do
+      conn = get(conn, Routes.item_path(conn, :clear_completed))
+
+      assert redirected_to(conn) == Routes.item_path(conn, :index)
+      assert html_response(conn, 302) =~ "redirected"
+
+      conn = get(conn, Routes.item_path(conn, :index))
+      Enum.each(items,
+        fn item ->
+          case item.status do
+            1 -> refute html_response(conn, 200) =~ item.text
+            _ -> assert html_response(conn, 200) =~ item.text
+          end
+        end)
+    end
+  end
+
   describe "toggle_status updates the status of an item" do
     setup [:create_item]
 

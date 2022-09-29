@@ -1,0 +1,59 @@
+<section class="todoapp">
+  <header class="header">
+    <h1>todos</h1>
+    <%= if @editing.id do %>
+      <a href={Routes.item_path(@conn, :index)} class="new-todo">
+        Click here to create a new item!
+      </a>
+    <% else %>
+      <%= render "form.html", Map.put(assigns, :action, Routes.item_path(@conn, :create)) %>
+    <% end %>
+  </header>
+  <section class="main" style="display: block;">
+    <input id="toggle-all" class="toggle-all" type="checkbox" />
+    <label for="toggle-all">Mark all as complete</label>
+    <ul class="todo-list">
+      <%= for item <- filter(@items, @filter) do %>
+        <li data-id={item.id} class={complete(item)}>
+          <%= link "", to: Routes.item_path(@conn, :toggle, item.id), class: "toggle " <> checked(item) %>
+          <div class="view">
+            <%= if item.id == @editing.id do %>
+              <%= render "form.html", Map.put(assigns, :action,
+                Routes.item_path(@conn, :update, item)) %>
+            <% else %>
+              <a href={Routes.item_path(@conn, :edit, item)} class="dblclick">
+                <label><%= item.text %></label>
+              </a>
+              <span></span> <!-- used for CSS Double Click -->
+            <% end %>
+            
+            <%= link "", class: "destroy",
+              to: Routes.item_path(@conn, :delete, item), method: :delete,
+              data: [confirm: "Are you sure?"] %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+  <%= if Enum.count(filter(@items, @filter)) > 0 do %>
+    <footer class="footer" style="display: block;">
+      <span class="todo-count"><strong><%= remaining_items(@items) %></strong> item<%= if remaining_items(@items) != 1, do: "s" %> left</span>
+      <ul class="filters">
+        <li>
+          <%= link "All", to: Routes.item_path(@conn, :index), class: selected(@filter, "all") %>
+        </li>
+        <li>
+          <%= link "Active " <> Integer.to_string(Enum.count(filter(@items, "active"))),
+            to: Routes.item_path(@conn, :index, filter: "active"),
+            class: selected(@filter, "active") %>
+        </li>
+        <li>
+          <%= link "Completed " <> Integer.to_string(Enum.count(filter(@items, "completed"))),
+            to: Routes.item_path(@conn, :index, filter: "completed"),
+            class: selected(@filter, "completed") %>
+        </li>
+      </ul>
+      <%= link "Clear completed", to: Routes.item_path(@conn, :clear_completed), class: "clear-completed" %>
+    </footer>
+  <% end %>
+</section>

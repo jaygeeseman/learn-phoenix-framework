@@ -75,11 +75,7 @@ defmodule TodosWeb.ItemController do
 
   def toggle(conn, %{"id" => id}) do
     item = Todo.get_item!(id)
-    Todo.update_item(item, %{status: toggle_status(item)})
+    Todo.update_item(item, %{status: Todo.toggle_status(item)})
     redirect(conn, to: Routes.item_path(conn, :index))
-  end
-
-  def toggle_status(item) do
-    if item.status == 0, do: 1, else: 0
   end
 end

@@ -3,10 +3,27 @@ defmodule Todos.TodoTest do
 
   alias Todos.Todo
 
-  describe "items" do
+  import Todos.TodoFixtures
+
+  describe "todo" do
     alias Todos.Todo.Item
 
-    import Todos.TodoFixtures
+    setup [:create_item]
+
+    test "toggle_status/1 item.status 1 > 0", %{item: item} do
+      assert item.status == 0
+
+      # first toggle
+      toggled_item = %{item | status: Todo.toggle_status(item)}
+      assert toggled_item.status == 1
+
+      # second toggle
+      assert Todo.toggle_status(toggled_item) == 0
+    end
+  end
+
+  describe "items" do
+    alias Todos.Todo.Item
 
     @invalid_attrs %{person_id: nil, status: nil, text: nil}
 
@@ -68,5 +85,10 @@ defmodule Todos.TodoTest do
       item = item_fixture()
       assert %Ecto.Changeset{} = Todo.change_item(item)
     end
+  end
+
+  defp create_item(_) do
+    item = item_fixture()
+    %{item: item}
   end
 end

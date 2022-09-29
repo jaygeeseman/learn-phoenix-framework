@@ -101,4 +101,11 @@ defmodule Todos.Todo do
   def change_item(%Item{} = item, attrs \\ %{}) do
     Item.changeset(item, attrs)
   end
+
+  @doc """
+  Returns an item with the `status` flag toggled active or inactive
+  """
+  def toggle_status(item) do
+    if item.status == 0, do: 1, else: 0
+  end
 end

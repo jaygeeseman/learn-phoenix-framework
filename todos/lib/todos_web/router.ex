@@ -17,7 +17,7 @@ defmodule TodosWeb.Router do
   scope "/", TodosWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", ItemController, :index
     resources "/items", ItemController
     get "/items/toggle/:id", ItemController, :toggle
     get "/clear_completed", ItemController, :clear_completed
